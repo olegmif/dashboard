@@ -7,10 +7,19 @@ package widget
 import (
 	"fmt"
 
+	"github.com/diamondburned/gotk4/pkg/glib/v2"
 	"github.com/diamondburned/gotk4/pkg/gtk/v4"
 
 	"github.com/olegmif/dashboard/internal/config"
 )
+
+// OnMain schedules f to run on the GTK main thread. Call it from any goroutine
+// that needs to touch a widget: GTK widgets must only be modified on the main
+// thread. This is the single seam every live widget uses for background updates
+// (goroutine produces data → OnMain applies it to the widget).
+func OnMain(f func()) {
+	glib.IdleAdd(f)
+}
 
 // Builder constructs a widget's root GTK widget from its config entry. This is
 // all the main loop knows about any widget.
