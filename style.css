@@ -1,16 +1,41 @@
 /* Dashboard styles, shared across all widget windows.
- * M1.Ph3: minimal styling for the placeholder stubs. Real per-widget styling
- * comes with each widget (M2–M6). Transparency is intentionally NOT enabled yet
- * (windows stay opaque); per-pixel alpha classes will be added later. */
+ *
+ * All windows have a TRANSPARENT background: a widget shows nothing behind its
+ * content unless it explicitly draws a background panel (a filled rectangle over
+ * the window). The text/content itself stays fully opaque.
+ *
+ * This needs a running compositor (picom) — it is running. We do NOT configure
+ * picom for this; transparency is per-pixel alpha drawn by GTK, which the
+ * compositor simply shows. (The picom corner-radius rule is unrelated.) */
 
+window {
+  background: transparent;
+}
+
+/* Base widget: no background, no border by default. A widget that wants a panel
+ * adds its own background element filling the window. */
 .widget {
-  background-color: #1e1e28;
   color: #d8d8e0;
-  border: 1px solid #44475a;
   font-family: monospace;
   font-size: 14px;
 }
 
 .widget > label {
   padding: 8px;
+}
+
+/* Clock: transparent background, white text, large. */
+.widget-clock {
+  padding: 6px 16px;
+}
+.clock-time {
+  font-family: monospace;
+  font-size: 96px;
+  font-weight: bold;
+  color: #ffffff;
+}
+.clock-date {
+  font-family: monospace;
+  font-size: 30px;
+  color: #ffffff;
 }

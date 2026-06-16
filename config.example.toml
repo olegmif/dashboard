@@ -8,6 +8,10 @@
 #   width,height — window size
 #
 # Move a widget (even to another monitor) by changing its coordinates.
+#
+# Per-widget settings go in an [widget.options] subtable; each widget type reads
+# its own keys (consumed starting M2.Ph2 for clock, M2.Ph3 for photo). A widget
+# with no options uses its defaults.
 
 [[widget]]
 type = "clock"
@@ -16,6 +20,8 @@ x = 40
 y = 40
 width = 300
 height = 120
+# [widget.options]
+# format = "15:04:05"   # (example; clock reads options starting M2.Ph2)
 
 [[widget]]
 type = "photo"
