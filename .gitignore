@@ -1,0 +1,13 @@
+# Go build artifacts
+/dashboard
+*.exe
+*.test
+*.out
+
+# Local config & secrets (Telegram session, api_id/api_hash, etc.)
+/config.toml
+*.session
+
+# Editor / OS
+*.swp
+.DS_Store
