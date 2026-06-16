@@ -1,0 +1,14 @@
+# Dashboard configuration. Copy to config.toml and adjust.
+# config.toml is gitignored (it will later hold secrets like Telegram api keys).
+
+# Window placement on the left monitor, in root-space pixels.
+# The left monitor in a multi-head X11 layout usually starts at x=0.
+#
+# These defaults draw a small, clearly visible test rectangle for M1.Ph2.
+# Later (full dashboard) set this to cover the whole left monitor, e.g.
+# x=0, y=0, width=<monitor width>, height=<monitor height>.
+[window]
+x = 40
+y = 40
+width = 600
+height = 400
