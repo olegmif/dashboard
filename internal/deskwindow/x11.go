@@ -86,7 +86,10 @@ func (*x11Override) Name() string { return "x11/override-redirect" }
 // will differ by instance/title, not class.
 const wmClass = "dashboard"
 
-func (*x11Override) Pin(win *gtk.ApplicationWindow, geo Geometry) {
+func (*x11Override) Pin(win *gtk.ApplicationWindow, geo Geometry, instance string) {
+	if instance == "" {
+		instance = wmClass
+	}
 	win.ConnectRealize(func() {
 		surf := surfacePointer(win)
 		if rc := C.dw_set_override_redirect(surf); rc != 0 {
@@ -94,7 +97,7 @@ func (*x11Override) Pin(win *gtk.ApplicationWindow, geo Geometry) {
 				"window will be managed by the WM")
 			return
 		}
-		setWMClass(surf, wmClass, wmClass)
+		setWMClass(surf, instance, wmClass)
 	})
 	win.ConnectMap(func() {
 		C.dw_place(surfacePointer(win),

@@ -20,7 +20,8 @@ type Geometry struct {
 type Backend interface {
 	// Name reports the backend kind, for logging.
 	Name() string
-	// Pin wires the window's lifecycle so it ends up pinned at geo. Call it
-	// before the window is shown.
-	Pin(win *gtk.ApplicationWindow, geo Geometry)
+	// Pin wires the window's lifecycle so it ends up pinned at geo. instance
+	// identifies this particular window (WM_CLASS instance / debugging); the
+	// WM_CLASS class is shared across all dashboard windows. Call before show.
+	Pin(win *gtk.ApplicationWindow, geo Geometry, instance string)
 }

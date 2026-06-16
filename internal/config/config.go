@@ -3,31 +3,35 @@ package config
 
 import "github.com/BurntSushi/toml"
 
-// Config is the whole dashboard configuration. It grows per milestone; for M1
-// it only carries window placement.
+// Config is the whole dashboard configuration: a list of widgets, each in its
+// own desktop window.
 type Config struct {
-	Window Window `toml:"window"`
+	Widgets []Widget `toml:"widget"`
 }
 
-// Window is the desktop-widget placement on the left monitor, in root-space
-// pixels (left monitor usually starts at x=0).
-type Window struct {
-	X      int `toml:"x"`
-	Y      int `toml:"y"`
-	Width  int `toml:"width"`
-	Height int `toml:"height"`
+// Widget describes one widget-window: which widget to show (Type), an optional
+// per-window identifier (Instance, used as WM_CLASS instance / window title),
+// and its placement on screen in root-space pixels.
+type Widget struct {
+	Type     string `toml:"type"`
+	Instance string `toml:"instance"`
+	X        int    `toml:"x"`
+	Y        int    `toml:"y"`
+	Width    int    `toml:"width"`
+	Height   int    `toml:"height"`
 }
 
-// Default is used when no config file is present.
+// Default is used when no config file is present or it lists no widgets.
 func Default() Config {
-	return Config{Window: Window{X: 0, Y: 0, Width: 1920, Height: 1080}}
+	return Config{Widgets: []Widget{
+		{Type: "clock", Instance: "clock", X: 40, Y: 40, Width: 300, Height: 120},
+	}}
 }
 
-// Load reads the TOML file at path on top of Default. Missing keys keep their
-// default. Returns the error if the file exists but cannot be parsed; a missing
-// file is the caller's concern (use os.IsNotExist on the error).
+// Load reads the TOML file at path. A missing file surfaces as an error
+// satisfying os.IsNotExist; the caller decides how to fall back.
 func Load(path string) (Config, error) {
-	cfg := Default()
+	var cfg Config
 	_, err := toml.DecodeFile(path, &cfg)
 	return cfg, err
 }

@@ -1,14 +1,50 @@
 # Dashboard configuration. Copy to config.toml and adjust.
 # config.toml is gitignored (it will later hold secrets like Telegram api keys).
-
-# Window placement on the left monitor, in root-space pixels.
-# The left monitor in a multi-head X11 layout usually starts at x=0.
 #
-# These defaults draw a small, clearly visible test rectangle for M1.Ph2.
-# Later (full dashboard) set this to cover the whole left monitor, e.g.
-# x=0, y=0, width=<monitor width>, height=<monitor height>.
-[window]
+# Each [[widget]] is one desktop window on the left monitor:
+#   type     — widget kind: clock | photo | telegram | weather | sysicons
+#   instance — per-window id (WM_CLASS instance + window title); optional
+#   x, y     — top-left position in root-space pixels (left monitor starts at x=0)
+#   width,height — window size
+#
+# Move a widget (even to another monitor) by changing its coordinates.
+
+[[widget]]
+type = "clock"
+instance = "clock"
 x = 40
 y = 40
-width = 600
-height = 400
+width = 300
+height = 120
+
+[[widget]]
+type = "photo"
+instance = "photo"
+x = 40
+y = 180
+width = 420
+height = 300
+
+[[widget]]
+type = "weather"
+instance = "weather"
+x = 40
+y = 500
+width = 300
+height = 150
+
+[[widget]]
+type = "sysicons"
+instance = "sysicons"
+x = 40
+y = 670
+width = 420
+height = 80
+
+[[widget]]
+type = "telegram"
+instance = "telegram-main"
+x = 40
+y = 770
+width = 420
+height = 260

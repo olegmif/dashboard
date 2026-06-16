@@ -1,6 +1,6 @@
 # M1 — прогресс
 
-**Статус:** в работе — Ph1, Ph2 готовы
+**Статус:** в работе — Ph1, Ph2, Ph3 готовы (остался Ph4)
 
 > Этот файл отражает реальность. Если сделанное расходится с `plan.md` —
 > описываем здесь как есть, план не подгоняем задним числом.
@@ -39,9 +39,30 @@
     тела пока НЕ включаем (по решению: только скругление). picom композитит и
     скругляет override-redirect окно нормально.
 
+- **Ph3 — Мультиоконный каркас: готово (проверено пользователем — пять окон).**
+  Модель «виджет = окно» реализована:
+  - `config.toml` → массив `[[widget]]` (type/instance/геометрия); `internal/config`
+    читает список, есть fallback на `Default()` если пусто/нет файла.
+  - `internal/widget` — контракт `Builder = func(config.Widget)(gtk.Widgetter,error)`,
+    `Registry` (имя→конструктор), хелпер `Placeholder`. Реестр собирается явно в
+    `main` (без init-магии/blank-import).
+  - Пять подпакетов-заглушек: `widget/{clock,photo,telegram,weather,sysicons}`.
+  - Главный цикл в `main`: config → окно (`SetDecorated(false)`, размер) → виджет
+    из реестра → `backend.Pin(win, geo, instance)` → `Present`. Невалидные/
+    неизвестные записи пропускаются с `Warn`.
+  - `instance` прокидывается в WM_CLASS-instance (класс общий `dashboard`),
+    плюс в заголовок `dashboard:<instance>`.
+  - `style.css` встроен через `go:embed`, ставится на дисплей одним
+    `GtkCssProvider` (приоритет APPLICATION).
+  - Прозрачность НЕ включена (по решению) — окна непрозрачны, скругление от picom.
+  - Проверено: пять окон встают по координатам, не тайлятся, фокус не воруют;
+    добавление/перенос виджета — правкой `config.toml` без пересборки.
+
 ## Сделано
-- `go.mod` / `go.sum` / `.gitignore` / `main.go` — каркас сборки.
+- `go.mod` / `go.sum` / `.gitignore` / `main.go` — каркас сборки + главный цикл.
 - `internal/deskwindow` — бэкенд-интерфейс + X11 override-redirect (cgo).
+- `internal/widget` (+5 подпакетов) — контракт, реестр, заглушки.
+- `style.css`, `config.toml`/`config.example.toml` — стиль и список виджетов.
   Окну детерминированно проставляется `WM_CLASS = dashboard` (через `XSetClassHint`),
   чтобы picom/WM-правила цеплялись по `class_g`, а не по непредсказуемому
   автоклассу GTK. Скругление углов — правилом picom по `class_g = 'dashboard'`

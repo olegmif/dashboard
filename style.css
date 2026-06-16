@@ -1,0 +1,16 @@
+/* Dashboard styles, shared across all widget windows.
+ * M1.Ph3: minimal styling for the placeholder stubs. Real per-widget styling
+ * comes with each widget (M2–M6). Transparency is intentionally NOT enabled yet
+ * (windows stay opaque); per-pixel alpha classes will be added later. */
+
+.widget {
+  background-color: #1e1e28;
+  color: #d8d8e0;
+  border: 1px solid #44475a;
+  font-family: monospace;
+  font-size: 14px;
+}
+
+.widget > label {
+  padding: 8px;
+}
