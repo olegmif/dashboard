@@ -37,22 +37,29 @@ func New(cfg config.Widget) (gtk.Widgetter, error) {
 		opts = defaults()
 	}
 
-	box := gtk.NewBox(gtk.OrientationVertical, 0)
-	box.AddCSSClass("widget")
-	box.AddCSSClass("widget-clock")
-	box.SetHAlign(gtk.AlignCenter)
-	box.SetVAlign(gtk.AlignCenter)
+	// content holds the labels and is centred inside the glass panel.
+	content := gtk.NewBox(gtk.OrientationVertical, 0)
+	content.SetHExpand(true)
+	content.SetVExpand(true)
+	content.SetHAlign(gtk.AlignCenter)
+	content.SetVAlign(gtk.AlignCenter)
 
 	timeLabel := gtk.NewLabel("")
 	timeLabel.AddCSSClass("clock-time")
-	box.Append(timeLabel)
+	content.Append(timeLabel)
 
 	var dateLabel *gtk.Label
 	if opts.DateFormat != "" {
 		dateLabel = gtk.NewLabel("")
 		dateLabel.AddCSSClass("clock-date")
-		box.Append(dateLabel)
+		content.Append(dateLabel)
 	}
+
+	// root fills the window and carries the frosted-glass background.
+	box := gtk.NewBox(gtk.OrientationVertical, 0)
+	box.AddCSSClass("widget-clock")
+	box.AddCSSClass("glass")
+	box.Append(content)
 
 	ticks := make(chan tick)
 	go produce(ticks, opts)

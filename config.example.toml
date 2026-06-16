@@ -30,6 +30,9 @@ x = 40
 y = 180
 width = 420
 height = 300
+[widget.options]
+dirs = ["/home/you/Pictures"]   # one or more directories with images
+# recursive = false             # descend into subdirectories
 
 [[widget]]
 type = "weather"
